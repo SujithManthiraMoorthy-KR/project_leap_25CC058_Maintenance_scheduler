@@ -1,6 +1,7 @@
 package com.example.maintenance_scheduler.service;
 
 import com.example.maintenance_scheduler.entity.Technician;
+import com.example.maintenance_scheduler.exception.ResourceNotFoundException;
 import com.example.maintenance_scheduler.repository.TechnicianRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,22 @@ public class TechnicianService {
     }
 
     public Technician getTechnicianById(Long id) {
+
         return technicianRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Technician not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Technician not found"
+                        ));
     }
 
     public void deleteTechnician(Long id) {
+
+        if (!technicianRepository.existsById(id)) {
+            throw new ResourceNotFoundException(
+                    "Technician not found"
+            );
+        }
+
         technicianRepository.deleteById(id);
     }
 }

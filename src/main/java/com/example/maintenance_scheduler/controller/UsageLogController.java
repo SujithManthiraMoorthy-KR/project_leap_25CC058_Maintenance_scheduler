@@ -3,7 +3,7 @@ package com.example.maintenance_scheduler.controller;
 import com.example.maintenance_scheduler.entity.UsageLog;
 import com.example.maintenance_scheduler.service.UsageLogService;
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -19,7 +19,8 @@ public class UsageLogController {
     @PostMapping("/{machineId}")
     public UsageLog logUsage(
             @PathVariable Long machineId,
-            @RequestParam Double usageHours) {
+            @RequestParam @Positive(message = "Usage hours must be greater than 0")
+            Double usageHours) {
 
         return usageLogService.logUsage(machineId, usageHours);
     }
